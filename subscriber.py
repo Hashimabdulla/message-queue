@@ -1,3 +1,5 @@
-from Subscriber import mqtt_sub
+from Subscriber import get_subscriber, subscribers
 
-a=
+subscribers = get_subscriber(subscribers.ZEROMQ_SUBSCRIBER)
+
+subscriber.recv_message()
