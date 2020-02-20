@@ -1,15 +1,35 @@
 from paho.mqtt.client import Client
 
-client = Client()
+# client = Client()
+#
+#
+# def on_connect(client, userdata, flags, rc):
+#     print("Connected")
+#     client.publish("test", "Hello python")
+#     print("Published")
+#
+#
+# client.on_connect = on_connect
+#
+# client.connect("127.0.0.1")
+# client.loop_forever()
+from Publisher.base_publisher import BasePublisher
 
 
-def on_connect(client, userdata, flags, rc):
-    print("Connected")
-    client.publish("test", "Hello world")
-    print("Published")
+class MqttPublisher(BasePublisher):
 
+    def connect(self, host="localhost", port=5000):
+        self.client = Client()
+        print("Connected")
 
-client.on_connect = on_connect
+    def send_message(self, topic="test",message="hello world"):
+        self.client.publish(topic,message)
+        print("Published")
 
-client.connect("127.0.0.1")
-client.loop_forever()
+    def close(self):
+        pass
+
+mqtt_object = MqttPublisher()
+x = mqtt_object.connect()
+y = mqtt_object.send_message("test","hello world")
+# mqtt_object.close()
