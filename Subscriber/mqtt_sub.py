@@ -26,10 +26,10 @@ class MqttSubscriber(BaseSubscriber):
     def connect(self, host="localhost", port=5000):
         print("Connected")
         self.client=Client()
-        client.recv_message = recv_message
-        client.subscribe("test")
+        self.client.recv_message = self.recv_message
+        self.client.subscribe("test")
 
-    def recv_message(self, topic,message):
+    def recv_message(self, message):
         print("Message received : {}".format(message))
 
 
