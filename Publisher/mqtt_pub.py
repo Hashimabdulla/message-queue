@@ -18,18 +18,20 @@ from Publisher.base_publisher import BasePublisher
 
 class MqttPublisher(BasePublisher):
 
+
+    def __init__(self, *args, **kwargs):
+        self.client = None
+        self.message = None
+
     def connect(self, host="localhost", port=5000):
         self.client = Client()
+        self.client.connect(host=host)
         print("Connected")
 
-    def send_message(self, topic="test",message="hello world"):
-        self.client.publish(topic,message)
+    def send_message(self,message, topic="test"):
+        self.client.publish(topic, message)
         print("Published")
 
     def close(self):
         pass
 
-mqtt_object = MqttPublisher()
-x = mqtt_object.connect()
-y = mqtt_object.send_message("test","hello world")
-# mqtt_object.close()

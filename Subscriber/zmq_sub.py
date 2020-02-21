@@ -27,7 +27,7 @@ class ZeroMQSubscriber(BaseSubscriber):
         self.client.subscribe("")  # Subscribe to all topics
         print("Starting receiver loop ...")
 
-    def recv_message(self, message):
+    def recv_message(self):
         while True:
             message = self.client.recv_string()
             print("Received string: %s ..." % message)
@@ -41,7 +41,7 @@ class ZeroMQSubscriber(BaseSubscriber):
         self.ctx = None
 
 
-zmq_object = ZeroMQSubscriber()
-x = zmq_object.connect()
-y = zmq_object.recv_message("message")
-zmq_object.close()
+# zmq_object = ZeroMQSubscriber()
+# x = zmq_object.connect()
+# y = zmq_object.recv_message("message")
+# zmq_object.close()

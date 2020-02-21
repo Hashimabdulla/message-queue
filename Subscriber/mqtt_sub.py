@@ -21,22 +21,27 @@ from paho.mqtt.client import Client
 
 from Subscriber.base_subscriber import BaseSubscriber
 
+
 class MqttSubscriber(BaseSubscriber):
 
-    def connect(self, host="localhost", port=5000):
+    def connect(self, host="localhost", port=5000, topic="test"):
         print("Connected")
-        self.client=Client()
-        self.client.recv_message = self.recv_message
-        self.client.subscribe("test")
+        self.client = Client()
+        self.client.connect(host=host)
+        self.client.on_message = self.recv_message
+        self.client.on_subscribe = self.on_subscribe
+        self.client.subscribe(topic)
+        self.client.loop_forever()
 
-    def recv_message(self, message):
-        print("Message received : {}".format(message))
+    def on_subscribe(self, *args, **kwargs):
+        print("Subscribed")
 
+    def recv_message(self, client, userdata, message):
+        print("Message received : {}".format(message.payload))
 
     def close(self):
         pass
 
-mqtt_object = MqttSubscriber()
-x = mqtt_object.connect("localhost",5000)
-y = mqtt_object.recv_message("test")
-# mqtt_object.close()
+    def __init__(self, *args, **kwargs):
+        self.client = None
+        self.message = None

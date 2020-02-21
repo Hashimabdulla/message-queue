@@ -39,7 +39,7 @@ class ZeroMQPublisher(BasePublisher):
 # msg = "Hello world "
 # sock.send_string(msg)
 # print("Sent string: %s ..." % msg)
-zmq_object = ZeroMQPublisher()
-x = zmq_object.connect()
-y = zmq_object.send_message("hello world")
-zmq_object.close()
+# zmq_object = ZeroMQPublisher()
+# x = zmq_object.connect()
+# y = zmq_object.send_message("hello world")
+# zmq_object.close()

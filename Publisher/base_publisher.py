@@ -11,7 +11,7 @@ class BasePublisher(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def send_message(self, message="hello world"):
+    def send_message(self, *args, **kwargs):
         pass
 
     @abc.abstractmethod
