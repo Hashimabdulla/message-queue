@@ -22,8 +22,7 @@ class ZeroMQPublisher(BasePublisher):
         print("Sending the message")
 
     def send_message(self, message="hello world"):
-        # while True:
-        self.client.send_string(message)
+      	self.client.send_string(message)
         print("Sent string: %s " % message)
         time.sleep(1)
 
