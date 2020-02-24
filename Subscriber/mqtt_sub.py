@@ -1,5 +1,7 @@
-from paho.mqtt.client import Client
+from time import time
 
+from paho.mqtt.client import Client
+import json
 # client = Client()
 #
 #
@@ -24,6 +26,10 @@ from Subscriber.base_subscriber import BaseSubscriber
 
 class MqttSubscriber(BaseSubscriber):
 
+    def __init__(self, *args, **kwargs):
+        self.client = None
+        self.message = None
+        self.f=open("time_taken.txt","a+")
     def connect(self, host="localhost", port=5000, topic="test"):
         print("Connected")
         self.client = Client()
@@ -37,11 +43,12 @@ class MqttSubscriber(BaseSubscriber):
         print("Subscribed")
 
     def recv_message(self, client, userdata, message):
-        print("Message received : {}".format(message.payload))
+        print(message.payload)
+        message = json.loads(message.payload)
+        latency = time() - message["sentAt"]
+        self.f.write("{}\n".format(latency))
+        print("Message received : {} in {}".format(message, str(latency)))
+
 
     def close(self):
         pass
-
-    def __init__(self, *args, **kwargs):
-        self.client = None
-        self.message = None
