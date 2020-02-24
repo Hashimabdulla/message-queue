@@ -25,12 +25,11 @@ class ZeroMQSubscriber(BaseSubscriber):
         self.client = self.ctx.socket(zmq.SUB)
         self.client.connect("tcp://{}:{}".format(host, port))
         self.client.subscribe("")  # Subscribe to all topics
-        print("Starting receiver loop ...")
+        print("Starting to receive the message")
 
     def recv_message(self):
-        while True:
-            message = self.client.recv_string()
-            print("Received string: %s ..." % message)
+        message = self.client.recv_string()
+        print("Received string: %s " % message)
 
     def close(self):
         self.client.close()

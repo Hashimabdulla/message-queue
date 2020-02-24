@@ -19,13 +19,13 @@ class ZeroMQPublisher(BasePublisher):
         self.ctx = zmq.Context()
         self.client = self.ctx.socket(zmq.PUB)
         self.client.bind("tcp://{}:{}".format(host, port))
-        print("Starting loop...")
+        print("Sending the message")
 
     def send_message(self, message="hello world"):
-        while True:
-            self.client.send_string(message)
-            print("Sent string: %s ..." % message)
-            time.sleep(1)
+        # while True:
+        self.client.send_string(message)
+        print("Sent string: %s " % message)
+        time.sleep(1)
 
     def close(self):
         self.client.close()
