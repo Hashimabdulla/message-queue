@@ -12,29 +12,45 @@
 from Publisher.base_publisher import BasePublisher
 import zmq
 import time
+import json
 
 
 class ZeroMQPublisher(BasePublisher):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ctx = None
+
+
     def connect(self, host="127.0.0.1", port="1234"):
         self.ctx = zmq.Context()
         self.client = self.ctx.socket(zmq.PUB)
         self.client.bind("tcp://{}:{}".format(host, port))
         print("Sending the message")
 
-    def send_message(self, message="hello world"):
-      	self.client.send_string(message)
+    def send_message(self, message=dict()):
+        msg_size = len(message["message"])
+
+        t = time.time()
+        print(message)
+        message['sendAt'] = t
+        message["size_in_BYTES"] = msg_size
+        message = json.dumps(message)
+        self.client.send_string(message)
         print("Sent string: %s " % message)
-        time.sleep(1)
+        # print("Message sent : {} in {}".format(message["message"], message["sendAt"]))
+        time.sleep(0.1)
 
     def close(self):
         self.client.close()
         self.ctx.close()
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.ctx = None
 
-# send_msg("hello world")
+
+
+# a=message["message"]="hello world"
+
+# ZeroMQPublisher.send_message("""message":"Hello World""")
 # msg = "Hello world "
 # sock.send_string(msg)
 # print("Sent string: %s ..." % msg)

@@ -29,7 +29,8 @@ class MqttSubscriber(BaseSubscriber):
     def __init__(self, *args, **kwargs):
         self.client = None
         self.message = None
-        self.f=open("time_taken.txt","a+")
+        self.f = open("time_taken_mqtt.txt", "a+")
+
     def connect(self, host="localhost", port=5000, topic="test"):
         print("Connected")
         self.client = Client()
@@ -46,9 +47,9 @@ class MqttSubscriber(BaseSubscriber):
         print(message.payload)
         message = json.loads(message.payload)
         latency = time() - message["sentAt"]
-        self.f.write("{}\n".format(latency))
-        print("Message received : {} in {}".format(message, str(latency)))
-
+        msg_size = len(message["message"].encode('utf-8'))
+        self.f.write("{} : {}\n".format(msg_size, latency))
+        print("Message received : {} size is {} in {}".format(message, msg_size, str(latency)))
 
     def close(self):
         pass

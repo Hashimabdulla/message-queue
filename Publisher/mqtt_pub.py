@@ -15,10 +15,11 @@ import json
 # client.connect("127.0.0.1")
 # client.loop_forever()
 from Publisher.base_publisher import BasePublisher
+
+
 # time=time.time()
 
 class MqttPublisher(BasePublisher):
-
 
     def __init__(self, *args, **kwargs):
         self.client = None
@@ -30,10 +31,11 @@ class MqttPublisher(BasePublisher):
         print("Connected")
 
     def send_message(self, message, topic="test"):
+        msg_size = len(message["message"])
         message["sentAt"] = time.time()
+        message["size_in_BYTES"] = msg_size
         self.client.publish(topic=topic, payload=json.dumps(message))
         print("Published")
 
     def close(self):
         pass
-

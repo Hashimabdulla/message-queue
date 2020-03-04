@@ -17,9 +17,17 @@ from Subscriber.base_subscriber import BaseSubscriber
 
 import zmq
 import time
+import json
 
 
 class ZeroMQSubscriber(BaseSubscriber):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # self.message = None
+        self.ctx = None
+        self.f = open("time_taken_zmq.txt", "a+")
+
     def connect(self, host="127.0.0.1", port=1234):
         self.ctx = zmq.Context()
         self.client = self.ctx.socket(zmq.SUB)
@@ -28,17 +36,17 @@ class ZeroMQSubscriber(BaseSubscriber):
         print("Starting to receive the message")
 
     def recv_message(self):
-        message = self.client.recv_string()
-        print("Received string: %s " % message)
+        while True:
+            message = self.client.recv_string()
+            message = json.loads(message)
+            latency = time.time() - message["sendAt"]
+            msg_size = len(message["message"].encode('utf-8'))
+            print("Received string: {} size is {} and it took {} seconds".format(message, msg_size, latency))
+            self.f.write("{} : {}\n".format(msg_size,latency))
 
     def close(self):
         self.client.close()
         self.ctx.close()
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.ctx = None
-
 
 # zmq_object = ZeroMQSubscriber()
 # x = zmq_object.connect()
